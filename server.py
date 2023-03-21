@@ -1,52 +1,44 @@
 import socket
 import threading
 
-# Configuration du serveur
+
 host = "localhost"
 port = 5000
 
-# Création d'un socket pour le serveur
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-# Lier le socket à l'adresse et au port
 server_socket.bind((host, port))
 
-# Attendre les connexions entrantes
 server_socket.listen()
 
-# Listes pour stocker les clients et leurs noms d'utilisateur
 clients = []
 users = {}
 
-# Fonction pour diffuser un message à tous les clients
 def broadcast_message(sender_socket, message):
     for client_socket in clients:
         if client_socket != sender_socket:
             client_socket.send(message)
 
-# Fonction pour gérer les connexions des clients
 def handle_client_connection(client_socket):
     # Demander le nom d'utilisateur du client
     client_socket.send("Entrez votre nom d'utilisateur: ".encode())
     username = client_socket.recv(1024).decode()
 
-    # Ajouter le client et son nom d'utilisateur aux listes
     users[client_socket] = username
     clients.append(client_socket)
 
-    # Diffuser un message d'accueil à tous les clients
     welcome_message = f"{username} a rejoint le chat".encode()
     broadcast_message(client_socket, welcome_message)
 
     while True:
-        # Attendre les messages du client
+       
         try:
             message = client_socket.recv(1024)
             if message:
-                # Diffuser le message à tous les clients
+
                 broadcast_message(client_socket, f"{username}: {message}".encode())
             else:
-                # En cas de déconnexion, supprimer le client et son nom d'utilisateur
+               
                 if client_socket in clients:
                     clients.remove(client_socket)
                 if client_socket in users:
