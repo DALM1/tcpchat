@@ -5,40 +5,48 @@ import threading
 host = "localhost"
 port = 5000
 
-# Initialisation de la socket du serveur
+# Création d'un socket pour le serveur
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
-# Association de la socket du serveur avec l'adresse et le port
+# Lier le socket à l'adresse et au port
 server_socket.bind((host, port))
 
-# Écoute des connexions entrantes
+# Attendre les connexions entrantes
 server_socket.listen()
 
-# Liste des clients connectés
+# Listes pour stocker les clients et leurs noms d'utilisateur
 clients = []
-
-# Dictionnaire des utilisateurs connectés avec leur socket correspondante
 users = {}
 
-# Fonction de diffusion de message à tous les clients connectés
+# Fonction pour diffuser un message à tous les clients
 def broadcast_message(sender_socket, message):
-    for client in clients:
-        if client != sender_socket:
-            client.send(message)
+    for client_socket in clients:
+        if client_socket != sender_socket:
+            client_socket.send(message)
 
-# Fonction de gestion de la connexion avec un client
+# Fonction pour gérer les connexions des clients
 def handle_client_connection(client_socket):
+    # Demander le nom d'utilisateur du client
+    client_socket.send("Entrez votre nom d'utilisateur: ".encode())
+    username = client_socket.recv(1024).decode()
+
+    # Ajouter le client et son nom d'utilisateur aux listes
+    users[client_socket] = username
+    clients.append(client_socket)
+
+    # Diffuser un message d'accueil à tous les clients
+    welcome_message = f"{username} a rejoint le chat".encode()
+    broadcast_message(client_socket, welcome_message)
+
     while True:
+        # Attendre les messages du client
         try:
-            # Réception du message du client
             message = client_socket.recv(1024)
             if message:
-                # Si le client envoie un message, on le diffuse à tous les autres clients
-                username = users[client_socket]
+                # Diffuser le message à tous les clients
                 broadcast_message(client_socket, f"{username}: {message}".encode())
             else:
-                # Si le client se déconnecte, on supprime ses informations de connexion
+                # En cas de déconnexion, supprimer le client et son nom d'utilisateur
                 if client_socket in clients:
                     clients.remove(client_socket)
                 if client_socket in users:
@@ -48,7 +56,7 @@ def handle_client_connection(client_socket):
                 client_socket.close()
                 break
         except:
-            # En cas d'erreur, la connexion est fermée
+            # En cas d'erreur, la connexion est fermée proprement
             if client_socket in clients:
                 clients.remove(client_socket)
             if client_socket in users:
@@ -58,29 +66,48 @@ def handle_client_connection(client_socket):
             client_socket.close()
             break
 
-# Fonction de gestion des connexions entrantes des clients
-def accept_clients():
+# Liste pour stocker les threads de connexion client
+threads = []
+
+try:
     while True:
-        # Accepter une connexion entrante
-        client_socket, client_address = server_socket.accept()
+        # Attendre une connexion entrante
+        client_socket, address = server_socket.accept()
+        print(f"Connexion acceptée de {address[0]}:{address[1]}")
 
-        # Demander au client son nom d'utilisateur
-        client_socket.send("Entrez votre nom d'utilisateur: ".encode())
-        username = client_socket.recv(1024).decode().strip()
-
-        # Ajouter le client à la liste des clients connectés
-        clients.append(client_socket)
-
-        # Ajouter le client et son nom d'utilisateur au dictionnaire des utilisateurs connectés
-        users[client_socket] = username
-
-        # Diffuser le message de connexion à tous les autres clients
-        broadcast_message(client_socket, f"{username} a rejoint le chat".encode())
-
-        # Créer un thread pour gérer la connexion avec ce client
+        # Créer un thread pour gérer la connexion client
         thread = threading.Thread(target=handle_client_connection, args=(client_socket,))
+        threads.append(thread)
         thread.start()
 
-# Démarrer le serveur
-print(f"Serveur démarré sur {host}:{port}")
-accept_clients()
+except KeyboardInterrupt:
+    print("Arrêt demandé, fermeture des connexions...")
+
+    # Fermer toutes les connexions clients
+    for client_socket in clients:
+        client_socket.close()
+
+    # Attendre que tous les threads se terminent
+    for thread in threads:
+        thread.join()
+
+    # Fermer le socket serveur
+    server_socket.close()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
