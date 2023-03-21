@@ -58,16 +58,16 @@ def handle_client_connection(client_socket):
             client_socket.close()
             break
 
-# Liste pour stocker les threads de connexion client
+
 threads = []
 
 try:
     while True:
-        # Attendre une connexion entrante
+       
         client_socket, address = server_socket.accept()
         print(f"Connexion acceptée de {address[0]}:{address[1]}")
 
-        # Créer un thread pour gérer la connexion client
+        
         thread = threading.Thread(target=handle_client_connection, args=(client_socket,))
         threads.append(thread)
         thread.start()
@@ -75,15 +75,15 @@ try:
 except KeyboardInterrupt:
     print("Arrêt demandé, fermeture des connexions...")
 
-    # Fermer toutes les connexions clients
+
     for client_socket in clients:
         client_socket.close()
 
-    # Attendre que tous les threads se terminent
+   
     for thread in threads:
         thread.join()
 
-    # Fermer le socket serveur
+    
     server_socket.close()
 
 
