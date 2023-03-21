@@ -3,7 +3,7 @@ import threading
 
 host = "localhost"
 port = 5000
-password = "48714871"  # définir un mot de passe
+password = "my_secret_password"  # définir un mot de passe
 
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server_socket.bind((host, port))
