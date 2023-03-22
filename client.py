@@ -28,3 +28,7 @@ while True:
 
 if message.lower() == "/quit":
     break
+
+# Run /quit pour quitter le chat
+
+client_socket.close()
