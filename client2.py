@@ -18,12 +18,12 @@ if response == "Mot de passe incorrect":
 
 username = input("Entrez votre nom d'utilisateur: ")
 client_socket.send(username.encode())
-print("\n")  # ajout d'un saut de ligne après l'envoi du nom d'utilisateur pour améliorer la lisibilité des messages sur le serveur
+print("\n")  
 
 while True:
     message = input("> ")
     client_socket.send(message.encode())
-    print("\n")  # ajout d'un saut de ligne après chaque envoi de message pour améliorer la lisibilité des messages sur le serveur
+    print("\n")  
 
     response = client_socket.recv(1024).decode()
     print(response)
