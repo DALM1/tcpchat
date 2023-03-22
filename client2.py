@@ -31,4 +31,6 @@ while True:
     if message.lower() == "/quit":
         break
 
+# tapez /quit pour fermer le programme
+
 client_socket.close()
