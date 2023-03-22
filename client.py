@@ -22,3 +22,4 @@ receive_thread.start()
 while True:
     message = input("> ")
     client_socket.send(message.encode())
+    print("\n")
