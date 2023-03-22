@@ -26,8 +26,6 @@ while True:
     client_socket.send(message.encode())
     print("\n")
 
-    response = client_socket.recv(1024).decode()
-    print(response)
 
     if message.lower() == "/quit":
         break
