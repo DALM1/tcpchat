@@ -8,6 +8,7 @@ client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client_socket.connect((host, port))
 
 username = input("Entrez votre nom d'utilisateur: ")
+client_socket.send(username.encode())
 
 client_socket.send(username.encode())
 
