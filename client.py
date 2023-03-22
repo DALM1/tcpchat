@@ -9,6 +9,7 @@ client_socket.connect((host, port))
 
 username = input("Entrez votre nom d'utilisateur: ")
 client_socket.send(username.encode())
+print("\n")
 
 client_socket.send(username.encode())
 
