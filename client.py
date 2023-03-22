@@ -26,8 +26,8 @@ while True:
     client_socket.send(message.encode())
     print("\n")
 
-if message.lower() == "/quit":
-    break
+    if message.lower() == "/quit":
+        break
 
 # Run /quit pour quitter le chat
 
