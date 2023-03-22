@@ -19,17 +19,17 @@ def broadcast_message(sender_socket, message):
 
 def handle_client_connection(client_socket):
     try:
-        # Demander le mot de passe du client
+       
         client_socket.send("Entrez le mot de passe: ".encode())
         password = client_socket.recv(1024).decode()
 
-        # Vérifier si le mot de passe est correct
+       
         if password != password:
             client_socket.send("Mot de passe incorrect".encode())
             client_socket.close()
             return
 
-        # Demander le nom d'utilisateur du client
+       
         client_socket.send("Entrez votre nom d'utilisateur: ".encode())
         username = client_socket.recv(1024).decode()
 
@@ -53,7 +53,7 @@ def handle_client_connection(client_socket):
                 client_socket.close()
                 break
     except KeyboardInterrupt:
-        # En cas d'erreur, la connexion est fermée proprement
+        
         if client_socket in clients:
             clients.remove(client_socket)
         if client_socket in users:
@@ -62,7 +62,7 @@ def handle_client_connection(client_socket):
             del users[client_socket]
         client_socket.close()
     except:
-        # En cas d'erreur, la connexion est fermée proprement
+        
         if client_socket in clients:
             clients.remove(client_socket)
         if client_socket in users:
@@ -84,13 +84,13 @@ try:
 except KeyboardInterrupt:
     print("Arrêt demandé, fermeture des connexions...")
 
-    # Fermer toutes les connexions clients
+    
     for client_socket in clients:
         client_socket.close()
 
-    # Attendre que tous les threads se terminent
+    
     for thread in threads:
         thread.join()
 
-    # Fermer le socket serveur
+    
     server_socket.close()

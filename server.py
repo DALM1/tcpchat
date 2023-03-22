@@ -20,7 +20,7 @@ def broadcast_message(sender_socket, message):
             client_socket.send(message)
 
 def handle_client_connection(client_socket):
-    # Demander le nom d'utilisateur du client
+   
     client_socket.send("Entrez votre nom d'utilisateur: ".encode())
     username = client_socket.recv(1024).decode()
 
@@ -48,7 +48,7 @@ def handle_client_connection(client_socket):
                 client_socket.close()
                 break
         except:
-            # En cas d'erreur, la connexion est fermée proprement
+           
             if client_socket in clients:
                 clients.remove(client_socket)
             if client_socket in users:
