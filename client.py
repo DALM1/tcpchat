@@ -11,7 +11,7 @@ username = input("Entrez votre nom d'utilisateur: ")
 client_socket.send(username.encode())
 print("\n")
 
-client_socket.send(username.encode())
+
 
 def receive_messages():
     while True:
@@ -25,3 +25,6 @@ while True:
     message = input("> ")
     client_socket.send(message.encode())
     print("\n")
+
+if message.lower() == "/quit":
+    break
