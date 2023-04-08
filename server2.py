@@ -1,6 +1,18 @@
 import socket
 import threading
 
+print (" (              (       *  ")         
+print (" )\ )    (      )\ )  (  `       )")  
+print ("(()/(    )\    (()/(  )\))(   ( /(")  
+print (" /(_))((((_)(   /(_))((_)()\  )\())") 
+print ("(_))_  )\ _ )\ (_))  (_()((_)((_)\ ")  
+print (" |   \ (_)_\(_)| |   |  \/  | / (_)") 
+print (" | |) | / _ \  | |__ | |\/| | | |  ") 
+print (" |___/ /_/ \_\ |____||_|  |_| |_| ")
+
+
+
+
 host = "localhost"
 port = 5000
 password = "my_secret_password"  # définir un mot de passe
