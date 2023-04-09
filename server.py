@@ -14,10 +14,12 @@ print (" |___/ /_/ \_\ |____||_|  |_| |_| ")
 
 
 
-
-
 host = "localhost"
 port = 5000
+
+print(f"Running at port {port}")
+
+
 
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
